@@ -1,6 +1,5 @@
 package com.shisorollsociety.expt1.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -13,7 +12,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -42,7 +40,6 @@ import com.shisorollsociety.expt1.view.ui.actions.ShutdownApplicationAction;
 public class MainFrame extends JFrame
 {
     protected JMenuBar       menuBar        = null;
-    protected JPanel         p_content      = null;
 
     protected WindowListener windowListener = null;
     private MainPanel        p_main         = new MainPanel();
@@ -71,7 +68,7 @@ public class MainFrame extends JFrame
         this.setPreferredSize(size);
         this.setUndecorated(true);
         this.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
@@ -116,16 +113,11 @@ public class MainFrame extends JFrame
             this.addWindowListener(windowListener);
         }
 
-        // Install content JPanel
-        p_content = generateMainPanel();
-        if (p_content == null)
-        {
-            p_content = new JPanel();
-            p_content.setBackground(Color.RED);
-        }
-
-        p_content.setPreferredSize(this.getSize());
-        this.setContentPane(p_content);
+        // Install main panel
+        this.p_main = new MainPanel();
+        UIRegistry.register(Tags.P_MAIN, p_main);
+        p_main.setPreferredSize(this.getSize());
+        this.setContentPane(p_main);
 
         // Pack and make visible
         this.pack();
@@ -152,22 +144,8 @@ public class MainFrame extends JFrame
      */
     public void update()
     {
-        p_content.revalidate();
-        p_content.repaint();
-    }
-
-
-    /**
-     * Generate the main content panel
-     * 
-     * @return A JPanel to serve as the main content panel for this frame. If <code>null</code> is returned, a blank
-     *         JPanel is used.
-     */
-    protected JPanel generateMainPanel()
-    {
-        // Components
-        UIRegistry.register(Tags.P_MAIN, p_main);
-        return p_main;
+        p_main.revalidate();
+        p_main.repaint();
     }
 
 

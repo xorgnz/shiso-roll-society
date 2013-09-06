@@ -29,6 +29,8 @@ public class App
 
         view = new View();
         view.show();
+        
+        
 
         Log.debug("App - startup complete");
     }

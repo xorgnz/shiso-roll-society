@@ -3,6 +3,8 @@
  */
 package com.shisorollsociety.expt1.sim;
 
+import com.shisorollsociety.expt1.sim.World.EntityType;
+
 /**
  * @author xorgnz
  * 
@@ -11,12 +13,12 @@ public abstract class Agent
 {
     private Tile locationTile;
 
-    private Type type;
+    private EntityType type;
 
     private int  health;
 
 
-    public Agent(Tile locationTile, Type type)
+    public Agent(Tile locationTile, EntityType type)
     {
         this.locationTile = locationTile;
         this.type = type;
@@ -29,7 +31,7 @@ public abstract class Agent
     }
 
 
-    public Type getType()
+    public EntityType getType()
     {
         return type;
     }
@@ -48,11 +50,4 @@ public abstract class Agent
 
 
     public abstract void tick();
-
-
-    // TODO: pull out the interface w/ all types populated to World.java
-    protected static interface Type
-    {
-
-    }
 }

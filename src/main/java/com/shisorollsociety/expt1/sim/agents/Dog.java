@@ -5,6 +5,7 @@ package com.shisorollsociety.expt1.sim.agents;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
+import com.shisorollsociety.expt1.sim.World.EntityType;
 
 /**
  * @author xorgnz
@@ -17,7 +18,7 @@ public class Dog extends Agent
 
     public Dog(Tile locationTile)
     {
-        super(locationTile, DogAgent.DOG);
+        super(locationTile, EntityType.DOG);
     }
 
     
@@ -47,11 +48,5 @@ public class Dog extends Agent
     {
         // TODO Auto-generated method stub
 
-    }
-
-
-    private static enum DogAgent implements Type
-    {
-        DOG
     }
 }

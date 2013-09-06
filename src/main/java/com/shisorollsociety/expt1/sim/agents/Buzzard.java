@@ -3,10 +3,9 @@
  */
 package com.shisorollsociety.expt1.sim.agents;
 
-import java.util.List;
-
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
+import com.shisorollsociety.expt1.sim.World.EntityType;
 
 /**
  * @author xorgnz
@@ -19,7 +18,7 @@ public class Buzzard extends Agent
 
     public Buzzard(Tile locationTile)
     {
-        super(locationTile, BuzzardType.BUZZARD);
+        super(locationTile, EntityType.BUZZARD);
     }
 
 
@@ -51,11 +50,5 @@ public class Buzzard extends Agent
     {
         // TODO Auto-generated method stub
 
-    }
-
-
-    private static enum BuzzardType implements Type
-    {
-        BUZZARD
     }
 }

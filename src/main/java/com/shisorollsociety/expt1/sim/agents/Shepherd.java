@@ -3,10 +3,12 @@
  */
 package com.shisorollsociety.expt1.sim.agents;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
+import com.shisorollsociety.expt1.sim.World;
 
 /**
  * @author xorgnz
@@ -14,16 +16,26 @@ import com.shisorollsociety.expt1.sim.Tile;
  */
 public class Shepherd extends Agent
 {
-    private List<Sheep> sheep;
-    private List<Dog>   dogs;
+    private List<Sheep> sheep = new ArrayList<Sheep>();
+    private List<Dog>   dogs  = new ArrayList<Dog>();
     private Wolf        targetWolf;
 
 
-    public Shepherd(List<Sheep> sheep, List<Dog> dogs, Tile locationTile)
+    public Shepherd(Tile locationTile)
     {
-        super(locationTile, ShepherdAgent.SHEPHERD);
-        this.sheep = sheep;
-        this.dogs = dogs;
+        super(locationTile, World.EntityType.SHEPHERD);
+    }
+
+
+    public void addDog(Dog d)
+    {
+        this.dogs.add(d);
+    }
+
+
+    public void addSheep(Sheep s)
+    {
+        this.sheep.add(s);
     }
 
 
@@ -74,11 +86,4 @@ public class Shepherd extends Agent
         // TODO Auto-generated method stub
 
     }
-
-
-    private static enum ShepherdAgent implements Type
-    {
-        SHEPHERD
-    }
-
 }

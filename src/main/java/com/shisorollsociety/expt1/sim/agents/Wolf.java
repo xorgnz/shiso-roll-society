@@ -5,6 +5,7 @@ package com.shisorollsociety.expt1.sim.agents;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
+import com.shisorollsociety.expt1.sim.World.EntityType;
 
 /**
  * @author xorgnz
@@ -17,7 +18,7 @@ public class Wolf extends Agent
 
     public Wolf(Tile locationTile)
     {
-        super(locationTile, WolfAgent.WOLF);
+        super(locationTile, EntityType.WOLF);
     }
 
 
@@ -59,11 +60,5 @@ public class Wolf extends Agent
     {
         // TODO Auto-generated method stub
 
-    }
-
-
-    private static enum WolfAgent implements Type
-    {
-        WOLF
     }
 }

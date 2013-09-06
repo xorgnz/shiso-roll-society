@@ -5,6 +5,7 @@ package com.shisorollsociety.expt1.sim.agents;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
+import com.shisorollsociety.expt1.sim.World.EntityType;
 
 /**
  * @author xorgnz
@@ -12,12 +13,19 @@ import com.shisorollsociety.expt1.sim.Tile;
  */
 public class Sheep extends Agent
 {
-    private int wooliness;
+    private static final int DEFAULT_WOOLINESS = 100;
+    private int              wooliness;
+
+
+    public Sheep(Tile t)
+    {
+        this(t, DEFAULT_WOOLINESS);
+    }
 
 
     public Sheep(Tile locationTile, int wooliness)
     {
-        super(locationTile, SheepType.SHEEP);
+        super(locationTile, EntityType.SHEEP);
         this.wooliness = wooliness;
     }
 
@@ -67,11 +75,4 @@ public class Sheep extends Agent
         // TODO Auto-generated method stub
 
     }
-
-
-    private static enum SheepType implements Type
-    {
-        SHEEP
-    }
-
 }

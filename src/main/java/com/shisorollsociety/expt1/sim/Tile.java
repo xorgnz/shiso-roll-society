@@ -3,6 +3,8 @@
  */
 package com.shisorollsociety.expt1.sim;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +14,27 @@ import com.shisorollsociety.expt1.sim.World.Direction;
  * @author xorgnz
  * 
  */
-public class Tile
+public abstract class Tile
 {
-    private List<Agent>          inhabitants;
-    private Map<Direction, Tile> neighbors;
+    private List<Agent>          inhabitants = new ArrayList<Agent>();
+    private Map<Direction, Tile> neighbors   = new HashMap<Direction, Tile>();
 
 
     public Map<Direction, Tile> getNeighbors()
     {
         return neighbors;
+    }
+
+
+    public void addNeighbor(Direction d, Tile t)
+    {
+        this.neighbors.put(d, t);
+    }
+    
+    
+    public void addInhabitant(Agent a)
+    {
+        this.inhabitants.add(a);
     }
 
 
