@@ -24,6 +24,11 @@ public abstract class Tile
     {
         return neighbors;
     }
+    
+    public Tile getNeighbor(Direction d) 
+    {
+        return neighbors.get(d);
+    }
 
 
     public void addNeighbor(Direction d, Tile t)

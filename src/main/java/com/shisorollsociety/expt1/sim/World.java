@@ -130,21 +130,97 @@ public class World
             a.getLocationTile().addInhabitant(a);
         }
     }
-
-
-    public List<Agent> findAgents(EntityType type, List<Tile> tiles)
+    
+    public <T extends Agent> List<T> getAgents(EntityType type)
     {
-        // TODO Implement this
-        return null;
+        List<Agent> tempList = agents.get(type);
+        List<T> returnList = new ArrayList<T>();
+        
+        for (Agent a : tempList)
+        {
+            returnList.add((T) a);
+        }
+        
+        return returnList;
     }
 
 
-    public List<Agent> findAgents(EntityType type, Tile tile, int radius)
+    public <T extends Agent> List<T> findAgents(EntityType type, List<Tile> tiles)
     {
-        // TODO Implement this
-        return null;
+        List<T> agentList = new ArrayList<T>();
+        
+        for (Tile t : tiles)
+        {
+            agentList.addAll(this.<T>findAgents(type, t));
+        }
+        
+        return agentList;
     }
 
+
+    //TODO: TEST THIS!!!
+    public <T extends Agent> List<T> findAgents(EntityType type, Tile tile, int radius)
+    {
+        return new Object() 
+        {
+            public List<T> findAgents(EntityType type, Tile tile, int radius, World world)
+            {
+                List<T> agentList = new ArrayList<T>();
+                
+                if (tile == null)
+                    return agentList;
+                
+                //Commence side branching
+                swingDirection(type, radius, agentList, tile, world);
+                
+                //Commence branching up
+                Tile currTile = tile.getNeighbor(Direction.NORTH);
+                for (int i = 1; i <= radius && currTile != null; i++, currTile = currTile.getNeighbor(Direction.NORTH))
+                { 
+                    swingDirection(type, radius - i, agentList, currTile, world);
+                }        
+
+                //Commence branching down
+                currTile = tile.getNeighbor(Direction.SOUTH);
+                for (int i = 1; i <= radius && currTile != null; i++, currTile = currTile.getNeighbor(Direction.SOUTH))
+                { 
+                    swingDirection(type, radius - i, agentList, currTile, world);
+                }
+                
+                return agentList;
+            }
+            
+            private void swingDirection(EntityType type, int swing, List<T> agentList, Tile centerTile, World world)
+            {
+                agentList.addAll(world.<T>findAgents(type, centerTile));
+                
+                Tile swingTile = centerTile.getNeighbor(Direction.EAST);
+                for (int left = 1; left <= swing && swingTile != null; left++, swingTile = swingTile.getNeighbor(Direction.EAST))
+                {
+                    agentList.addAll(world.<T>findAgents(type, swingTile));
+                }
+                swingTile = centerTile.getNeighbor(Direction.WEST);
+                for (int right = 1; right <= swing && swingTile != null; right++, swingTile = swingTile.getNeighbor(Direction.WEST))
+                {
+                    agentList.addAll(world.<T>findAgents(type, swingTile));
+                }
+            }
+        }
+        .findAgents(type, tile, radius, this);
+    }
+
+    private <T extends Agent> List<T> findAgents(EntityType type, Tile tile)
+    {
+        List<T> agentList = new ArrayList<T>();
+        for (Agent a : tile.getInhabitants())
+        {
+            if (a.getType().equals(type))
+            {
+                agentList.add((T) a);
+            }
+        }
+        return agentList;
+    }
 
     public Tile randomTile()
     {
