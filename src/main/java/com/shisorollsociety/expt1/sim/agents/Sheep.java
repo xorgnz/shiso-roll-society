@@ -5,7 +5,7 @@ package com.shisorollsociety.expt1.sim.agents;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
-import com.shisorollsociety.expt1.sim.World.EntityType;
+import com.shisorollsociety.expt1.sim.World.AgentType;
 
 /**
  * @author xorgnz
@@ -25,7 +25,7 @@ public class Sheep extends Agent
 
     public Sheep(Tile locationTile, int wooliness)
     {
-        super(locationTile, EntityType.SHEEP);
+        super(locationTile, AgentType.SHEEP);
         this.wooliness = wooliness;
     }
 

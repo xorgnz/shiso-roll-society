@@ -3,7 +3,7 @@
  */
 package com.shisorollsociety.expt1.sim;
 
-import com.shisorollsociety.expt1.sim.World.EntityType;
+import com.shisorollsociety.expt1.sim.World.AgentType;
 
 /**
  * @author xorgnz
@@ -13,12 +13,12 @@ public abstract class Agent
 {
     private Tile locationTile;
 
-    private EntityType type;
+    private AgentType type;
 
     private int  health;
 
 
-    public Agent(Tile locationTile, EntityType type)
+    public Agent(Tile locationTile, AgentType type)
     {
         this.locationTile = locationTile;
         this.type = type;
@@ -31,7 +31,7 @@ public abstract class Agent
     }
 
 
-    public EntityType getType()
+    public AgentType getType()
     {
         return type;
     }

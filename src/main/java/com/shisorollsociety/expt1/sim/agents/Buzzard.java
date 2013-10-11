@@ -5,7 +5,7 @@ package com.shisorollsociety.expt1.sim.agents;
 
 import com.shisorollsociety.expt1.sim.Agent;
 import com.shisorollsociety.expt1.sim.Tile;
-import com.shisorollsociety.expt1.sim.World.EntityType;
+import com.shisorollsociety.expt1.sim.World.AgentType;
 
 /**
  * @author xorgnz
@@ -18,7 +18,7 @@ public class Buzzard extends Agent
 
     public Buzzard(Tile locationTile)
     {
-        super(locationTile, EntityType.BUZZARD);
+        super(locationTile, AgentType.BUZZARD);
     }
 
 

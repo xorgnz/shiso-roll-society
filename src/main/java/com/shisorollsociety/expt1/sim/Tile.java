@@ -24,8 +24,9 @@ public abstract class Tile
     {
         return neighbors;
     }
-    
-    public Tile getNeighbor(Direction d) 
+
+
+    public Tile getNeighbor(Direction d)
     {
         return neighbors.get(d);
     }
@@ -35,8 +36,8 @@ public abstract class Tile
     {
         this.neighbors.put(d, t);
     }
-    
-    
+
+
     public void addInhabitant(Agent a)
     {
         this.inhabitants.add(a);
@@ -49,13 +50,16 @@ public abstract class Tile
     }
 
 
+    /**
+     * Process a tick
+     * 
+     * This involves:
+     * - triggering a tick on all agents.
+     */
     public void tick()
     {
-        for (Agent a : getInhabitants())
-        {
-            a.tick();
-        }
+        // TODO: figure out how else this ticks
 
-        return; // TODO: figure out how else this ticks
+        return;
     }
 }

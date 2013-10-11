@@ -21,34 +21,34 @@ import com.shisorollsociety.expt1.sim.agents.Wolf;
  */
 public class World
 {
-    private Tile[][]                     tiles;
-    private Map<EntityType, List<Agent>> agents               = new HashMap<EntityType, List<Agent>>();
+    private static final int            DEFAULT_WORLD_HEIGHT = 12;
+    private static final int            DEFAULT_WORLD_WIDTH  = 12;
 
-    private int                          width;
-    private int                          height;
+    private static final Random         RANDOM               = new Random();
+    private Map<AgentType, List<Agent>> agents               = new HashMap<AgentType, List<Agent>>();
 
-    private static final int             DEFAULT_WORLD_WIDTH  = 12;
-    private static final int             DEFAULT_WORLD_HEIGHT = 12;
+    private int                         height;
+    private Tile[][]                    tiles;
 
-    private static final Random          RANDOM               = new Random();
+    private int                         width;
 
 
     public static enum Direction
     {
-        NORTH,
         EAST,
+        NORTH,
         SOUTH,
         WEST
     }
 
 
-    public static enum EntityType
+    public static enum AgentType
     {
         BUZZARD,
-        SHEPHERD,
         DOG,
-        WOLF,
-        SHEEP
+        SHEEP,
+        SHEPHERD,
+        WOLF
     }
 
 
@@ -86,15 +86,22 @@ public class World
             }
         }
 
-        agents.put(EntityType.BUZZARD, new ArrayList<Agent>());
-        agents.put(EntityType.DOG, new ArrayList<Agent>());
-        agents.put(EntityType.SHEEP, new ArrayList<Agent>());
-        agents.put(EntityType.SHEPHERD, new ArrayList<Agent>());
-        agents.put(EntityType.WOLF, new ArrayList<Agent>());
+        agents.put(AgentType.BUZZARD, new ArrayList<Agent>());
+        agents.put(AgentType.DOG, new ArrayList<Agent>());
+        agents.put(AgentType.SHEEP, new ArrayList<Agent>());
+        agents.put(AgentType.SHEPHERD, new ArrayList<Agent>());
+        agents.put(AgentType.WOLF, new ArrayList<Agent>());
     }
 
 
-    public void createNewAgents(EntityType type, int count)
+    /**
+     * Creates agents of given type and number randomly throughout world.
+     * 
+     * @param type
+     * @param count
+     */
+    // TODO: Unit test needed
+    public void createNewAgents(AgentType type, int count)
     {
         List<Agent> agents = this.agents.get(type);
 
@@ -103,6 +110,8 @@ public class World
             Agent a = null;
             Tile t = randomTile();
 
+            
+            // REFACTOR - Switch out AgentType enum for Agent class references. Then, create using reflection. 
             switch (type)
             {
             case BUZZARD:
@@ -124,92 +133,166 @@ public class World
                 throw new IllegalArgumentException("Cannot instantiate null agents");
             }
 
-            agents.add(new Buzzard(t));
-
             agents.add(a);
             a.getLocationTile().addInhabitant(a);
         }
     }
-    
-    public <T extends Agent> List<T> getAgents(EntityType type)
-    {
-        List<Agent> tempList = agents.get(type);
-        List<T> returnList = new ArrayList<T>();
-        
-        for (Agent a : tempList)
-        {
-            returnList.add((T) a);
-        }
-        
-        return returnList;
-    }
 
 
-    public <T extends Agent> List<T> findAgents(EntityType type, List<Tile> tiles)
+    /**
+     * Looks for agents of a given type within a list of tiles.
+     * 
+     * @param type
+     * @param tiles
+     * @return
+     */
+    // TODO: Unit test needed
+    public <T extends Agent> List<T> findAgentsInTiles(AgentType type, List<Tile> tiles)
     {
         List<T> agentList = new ArrayList<T>();
-        
+
         for (Tile t : tiles)
         {
-            agentList.addAll(this.<T>findAgents(type, t));
+            agentList.addAll(this.<T> findAgents(type, t));
         }
-        
+
         return agentList;
     }
 
 
-    //TODO: TEST THIS!!!
-    public <T extends Agent> List<T> findAgents(EntityType type, Tile tile, int radius)
+    /**
+     * Searches for agents of a given type within <code>radius</code> steps of tile based on
+     * in-tile connections. Based on Manhattan distance.
+     * 
+     * @param type
+     * @param tile
+     * @param radius
+     * @return
+     */
+    // TODO: Unit test needed
+    public <T extends Agent> List<T> findAgentsInRange(AgentType type, Tile tile, int radius)
     {
-        return new Object() 
+        return new Object()
         {
-            public List<T> findAgents(EntityType type, Tile tile, int radius, World world)
+            public List<T> findAgents(AgentType type, Tile tile, int radius, World world)
             {
                 List<T> agentList = new ArrayList<T>();
-                
+
                 if (tile == null)
                     return agentList;
-                
-                //Commence side branching
+
+                // Commence side branching
                 swingDirection(type, radius, agentList, tile, world);
-                
-                //Commence branching up
+
+                // Commence branching up
                 Tile currTile = tile.getNeighbor(Direction.NORTH);
                 for (int i = 1; i <= radius && currTile != null; i++, currTile = currTile.getNeighbor(Direction.NORTH))
-                { 
+                {
                     swingDirection(type, radius - i, agentList, currTile, world);
-                }        
+                }
 
-                //Commence branching down
+                // Commence branching down
                 currTile = tile.getNeighbor(Direction.SOUTH);
                 for (int i = 1; i <= radius && currTile != null; i++, currTile = currTile.getNeighbor(Direction.SOUTH))
-                { 
+                {
                     swingDirection(type, radius - i, agentList, currTile, world);
                 }
-                
+
                 return agentList;
             }
-            
-            private void swingDirection(EntityType type, int swing, List<T> agentList, Tile centerTile, World world)
+
+
+            private void swingDirection(AgentType type, int swing, List<T> agentList, Tile centerTile, World world)
             {
-                agentList.addAll(world.<T>findAgents(type, centerTile));
-                
+                agentList.addAll(world.<T> findAgents(type, centerTile));
+
                 Tile swingTile = centerTile.getNeighbor(Direction.EAST);
-                for (int left = 1; left <= swing && swingTile != null; left++, swingTile = swingTile.getNeighbor(Direction.EAST))
+                for (int left = 1; left <= swing && swingTile != null; left++, swingTile = swingTile
+                        .getNeighbor(Direction.EAST))
                 {
-                    agentList.addAll(world.<T>findAgents(type, swingTile));
+                    agentList.addAll(world.<T> findAgents(type, swingTile));
                 }
                 swingTile = centerTile.getNeighbor(Direction.WEST);
-                for (int right = 1; right <= swing && swingTile != null; right++, swingTile = swingTile.getNeighbor(Direction.WEST))
+                for (int right = 1; right <= swing && swingTile != null; right++, swingTile = swingTile
+                        .getNeighbor(Direction.WEST))
                 {
-                    agentList.addAll(world.<T>findAgents(type, swingTile));
+                    agentList.addAll(world.<T> findAgents(type, swingTile));
                 }
             }
         }
-        .findAgents(type, tile, radius, this);
+                .findAgents(type, tile, radius, this);
     }
 
-    private <T extends Agent> List<T> findAgents(EntityType type, Tile tile)
+
+    /**
+     * Retrieves all agents of a given type.
+     * 
+     * @param type
+     * @return
+     */
+    public <T extends Agent> List<T> getAgentsByType(AgentType type)
+    {
+        List<T> returnList = new ArrayList<T>();
+
+        for (Agent a : agents.get(type))
+        {
+            returnList.add((T) a);
+        }
+
+        return returnList;
+    }
+
+
+    /**
+     * Randomly selects a tile.
+     * 
+     * @return
+     */
+    public Tile randomTile()
+    {
+        return tiles[RANDOM.nextInt(width)][RANDOM.nextInt(height)];
+    }
+
+
+    /**
+     * Process a single tick.
+     * 
+     * This involves:
+     * - Triggering a tick on each tile.
+     * - Triggering a tick on each agent.
+     */
+    public void tick()
+    {
+        // Trigger tick on tiles
+        for (int i = 0; i < tiles.length; i++)
+        {
+            for (int j = 0; j < tiles[i].length; j++)
+            {
+                tiles[i][j].tick();
+            }
+        }
+
+        // Trigger tick on agents
+        for (AgentType type : AgentType.values())
+        {
+            for (Agent a : agents.get(type))
+            {
+                a.tick();
+            }
+        }
+
+        // TODO: How else does this tick?
+    }
+
+
+    /**
+     * Looks for all agents of a given type within a given tile.
+     * 
+     * @param type
+     * @param tile
+     * @return
+     */
+    private <T extends Agent> List<T> findAgents(AgentType type, Tile tile)
     {
         List<T> agentList = new ArrayList<T>();
         for (Agent a : tile.getInhabitants())
@@ -220,24 +303,5 @@ public class World
             }
         }
         return agentList;
-    }
-
-    public Tile randomTile()
-    {
-        return tiles[RANDOM.nextInt(width)][RANDOM.nextInt(height)];
-    }
-
-
-    public void tick()
-    {
-        for (int i = 0; i < tiles.length; i++)
-        {
-            for (int j = 0; j < tiles[i].length; j++)
-            {
-                tiles[i][j].tick();
-            }
-        }
-
-        // TODO: How else does this tick?
     }
 }

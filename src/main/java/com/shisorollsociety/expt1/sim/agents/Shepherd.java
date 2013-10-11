@@ -23,7 +23,7 @@ public class Shepherd extends Agent
 
     public Shepherd(Tile locationTile)
     {
-        super(locationTile, World.EntityType.SHEPHERD);
+        super(locationTile, World.AgentType.SHEPHERD);
     }
 
 
