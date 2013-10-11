@@ -14,6 +14,7 @@ import com.shisorollsociety.expt1.sim.agents.Dog;
 import com.shisorollsociety.expt1.sim.agents.Sheep;
 import com.shisorollsociety.expt1.sim.agents.Shepherd;
 import com.shisorollsociety.expt1.sim.agents.Wolf;
+import com.shisorollsociety.expt1.sim.tiles.GrassTile;
 
 /**
  * @author xorgnz
@@ -23,13 +24,11 @@ public class World
 {
     private static final int            DEFAULT_WORLD_HEIGHT = 12;
     private static final int            DEFAULT_WORLD_WIDTH  = 12;
-
     private static final Random         RANDOM               = new Random();
-    private Map<AgentType, List<Agent>> agents               = new HashMap<AgentType, List<Agent>>();
-
+    
+    private Map<AgentType, List<Agent>> agents;
     private int                         height;
     private Tile[][]                    tiles;
-
     private int                         width;
 
 
@@ -70,7 +69,7 @@ public class World
         {
             for (int j = 0; j < height; j++)
             {
-                tiles[i][j] = new DefaultTile();
+                tiles[i][j] = new GrassTile();
 
                 // Cross link each new tile with that to its west and north
                 if (i > 1)
@@ -85,6 +84,8 @@ public class World
                 }
             }
         }
+        
+        agents = new HashMap<AgentType, List<Agent>>();
 
         agents.put(AgentType.BUZZARD, new ArrayList<Agent>());
         agents.put(AgentType.DOG, new ArrayList<Agent>());

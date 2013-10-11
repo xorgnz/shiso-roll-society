@@ -56,10 +56,6 @@ public abstract class Tile
      * This involves:
      * - triggering a tick on all agents.
      */
-    public void tick()
-    {
-        // TODO: figure out how else this ticks
+    public abstract void tick();
 
-        return;
-    }
 }
